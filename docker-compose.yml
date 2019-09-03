@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+
+  app-root:
+    build:
+      context: ./app-root
+    ports:
+      - "3000:3000"
+
+  app-alpha:
+    build:
+      context: ./app-alpha
+    ports:
+      - "3001:3001"
+
+  app-beta:
+    build:
+      context: ./app-beta
+    ports:
+      - "3002:3002"

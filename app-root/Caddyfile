@@ -1,0 +1,45 @@
+# Serve locally on this port
+0.0.0.0:3000
+
+# Enable gzip compression
+gzip
+
+header / {
+  Cache-Control "no-cache, no-store, must-revalidate"
+}
+
+# Enable unconditional caching for static assets
+header /static {
+  Cache-Control "public, max-age=31536000"
+}
+
+# Add healthcheck endpoint
+status 200 /health
+
+# Enable html5 routing
+rewrite {
+  if {path} not_starts_with /health
+  if {path} not_starts_with /app-alpha
+  if {path} not_starts_with /app-beta
+  to {path} {path}/ /
+}
+
+proxy /app-alpha app-alpha:3001 {
+  without /app-alpha
+}
+
+proxy /app-beta app-beta:3002 {
+  without /app-beta
+}
+
+# Override default of fetching certificate from Lets Encrypt
+tls off
+
+# Enable templates to inject env variables in index.html
+templates
+
+# Serve the index from here
+root app
+
+# Create logs
+log stdout

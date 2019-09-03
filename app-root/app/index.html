@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="shortcut icon" href="favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Web site created using create-react-app" />
+  <title>Root App</title>
+  <style>
+    html,
+    body,
+    .app {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+    }
+
+    html {
+      box-sizing: border-box;
+    }
+
+    *,
+    *::after,
+    *::before {
+      box-sizing: inherit;
+    }
+
+    .app {
+      display: flex;
+      flex-direction: column;
+    }
+
+    nav {
+      width: 100%;
+      height: 100px;
+      align-items: center;
+      padding: 20px;
+    }
+
+    nav a {
+      border: 1px solid lightblue;
+      display: inline-block;
+      padding: 3px;
+    }
+
+    main {
+      flex-shrink: 0;
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div class="app">
+    <nav>
+      <a href="/alpha">App Alpha</a>
+      <a href="/beta">App Beta</a>
+    </nav>
+    <main id="main">Loading...</main>
+  </div>
+
+  <!-- <script src="/app-alpha/app-alpha.js"></script>
+  <script src="/app-beta/app-beta.js"></script> -->
+
+  <script>
+    const fetchApp = ([name, renderName]) => () => {
+      return new Promise((resolve) => {
+        const script = document.createElement('script')
+        script.src = `/${name}/${name}.js`
+        script.onload = () => resolve(window[renderName])
+
+        document.head.appendChild(script)
+      })
+    }
+
+    const routes = {
+      '/': fetchApp(['app-alpha', 'renderAppAlpha']),
+      '/alpha': fetchApp(['app-alpha', 'renderAppAlpha']),
+      '/beta': fetchApp(['app-beta', 'renderAppBeta']),
+    }
+
+    function navigate({ path }) {
+      const fetchApp = routes[path]
+
+      fetchApp().then(render => render({id: 'main'}))
+    }
+
+    document.addEventListener('click', (event) => {
+      const link = event.target.closest('a')
+
+      if (link) {
+        event.preventDefault()
+        history.pushState({}, null, link.pathname)
+        navigate({ path: link.pathname })
+      }
+    })
+
+    window.addEventListener('popstate', () => {
+      navigate({ path: document.location.pathname })
+    })
+
+    navigate({ path: document.location.pathname })
+  </script>
+</body>
+
+</html>
