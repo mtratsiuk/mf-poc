@@ -1,8 +1,7 @@
 window.renderAppAlpha = ({ id }) => {
-  document.getElementById(id).innerHTML = 'Loading...'
+  // document.getElementById(id).innerHTML = 'Loading...'
 
-  import('./root.js')
-      .then(({ renderApp }) => {
-        renderApp(id)
-      })
-}
+  import("./root.js").then(({ renderApp }) => {
+    renderApp(id);
+  });
+};

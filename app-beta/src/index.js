@@ -1,8 +1,7 @@
 window.renderAppBeta = ({ id }) => {
-  document.getElementById(id).innerHTML = 'Loading...'
+  // document.getElementById(id).innerHTML = 'Loading...'
 
-  import('./rootBeta.js')
-      .then(({ renderApp }) => {
-        renderApp(id)
-      })
-}
+  import("./rootBeta.js").then(({ renderApp }) => {
+    renderApp(id);
+  });
+};
